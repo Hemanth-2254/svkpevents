@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Login - SVKP College{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-page { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .login-box { background: white; border-radius: var(--border-radius); box-shadow: var(--shadow-lg); overflow: hidden; max-width: 480px; width: 100%; }
+    .login-header { background: linear-gradient(135deg, var(--primary), #1565c0); color: white; padding: 35px 35px 30px; text-align: center; }
+    .login-header .logo { font-size: 50px; margin-bottom: 12px; }
+    .login-header h1 { font-size: 22px; font-weight: 800; }
+    .login-header p { font-size: 13px; opacity: 0.85; margin-top: 5px; }
+    .login-body { padding: 30px 35px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-box">
+        <div class="login-header">
+            <div class="logo">🎓</div>
+            <h1>SVKP College</h1>
+            <p>Event Management Portal — Login</p>
+        </div>
+        <div class="login-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username *</label>
+                    <input type="text" name="username" class="form-control" placeholder="Enter your username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label>Password *</label>
+                    <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number * <small style="color:#999;">(For OTP verification)</small></label>
+                    <input type="tel" name="phone" class="form-control" placeholder="Registered phone number" required>
+                </div>
+                <div style="background:#e3f2fd; padding:12px; border-radius:8px; margin-bottom:18px; font-size:12px; color:#1565c0;">
+                    <i class="fas fa-info-circle"></i> An OTP will be sent to your phone for verification. Check CMD/terminal for OTP.
+                </div>
+                <button type="submit" class="btn btn-primary btn-full btn-lg">
+                    <i class="fas fa-sign-in-alt"></i> Login & Get OTP
+                </button>
+            </form>
+
+            <div style="text-align:center; margin-top:20px; padding-top:20px; border-top:1px solid #f0f0f0;">
+                <p style="font-size:13px; color:#666;">Don't have an account?
+                    <a href="{% url 'accounts:register_choice' %}" style="color:var(--primary); font-weight:700;">Register Now</a>
+                </p>
+            </div>
+
+            <!-- User type note -->
+            <div style="margin-top:15px; background:#f8f9fa; padding:14px; border-radius:8px;">
+                <p style="font-size:12px; color:#666; margin-bottom:6px; font-weight:600;">Login as:</p>
+                <div style="display:flex; gap:10px; font-size:12px;">
+                    <span>🎒 Student</span>
+                    <span>👨‍🏫 Staff</span>
+                    <span>🧑 Other</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

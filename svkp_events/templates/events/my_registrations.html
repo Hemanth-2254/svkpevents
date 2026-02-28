@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+
+{% block title %}My Registrations - SVKP College{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <h1 style="font-size:24px; font-weight:700; color:var(--primary); margin-bottom:25px;">
+        <i class="fas fa-ticket-alt"></i> My Event Registrations
+    </h1>
+
+    {% if registrations %}
+    <div style="display:grid; gap:18px;">
+        {% for reg in registrations %}
+        <div class="card">
+            <div style="display:flex; padding:20px; gap:20px; align-items:center; flex-wrap:wrap;">
+                <div style="flex:1; min-width:200px;">
+                    <div style="font-size:11px; color:#999; text-transform:uppercase; font-weight:600; margin-bottom:4px;">
+                        <span class="badge badge-{{ reg.event.event_type }}">{{ reg.event.get_event_type_display }}</span>
+                    </div>
+                    <div style="font-size:16px; font-weight:700; color:var(--primary); margin-bottom:6px;">{{ reg.event.title }}</div>
+                    <div style="font-size:12px; color:#666; display:flex; gap:15px; flex-wrap:wrap;">
+                        <span><i class="fas fa-calendar"></i> {{ reg.event.start_date|date:"M d, Y" }}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> {{ reg.event.venue }}</span>
+                        <span><i class="fas fa-clock"></i> Registered: {{ reg.registered_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:0 20px;">
+                    <div style="font-size:11px; color:#999; margin-bottom:4px;">Ticket No.</div>
+                    <div style="font-weight:700; font-size:14px; color:var(--primary); font-family:monospace;">{{ reg.ticket_number }}</div>
+                </div>
+                <div style="text-align:center; padding:0 20px;">
+                    <div style="font-size:11px; color:#999; margin-bottom:4px;">Status</div>
+                    <span class="badge badge-{{ reg.status }}">{{ reg.get_status_display }}</span>
+                </div>
+                <div>
+                    {% if reg.status == 'confirmed' %}
+                        <a href="{% url 'payments:ticket' reg.id %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-ticket-alt"></i> View Ticket
+                        </a>
+                    {% elif reg.status == 'pending' %}
+                        <a href="{% url 'payments:payment' reg.id %}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-credit-card"></i> Pay Now
+                        </a>
+                    {% else %}
+                        <span style="font-size:12px; color:#999;">No action needed</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align:center; padding:60px;">
+        <i class="fas fa-ticket-alt" style="font-size:50px; color:#ddd; margin-bottom:20px; display:block;"></i>
+        <h3 style="color:#999;">No registrations yet</h3>
+        <p style="color:#bbb; margin-top:8px; margin-bottom:20px;">Browse events and register to see your tickets here.</p>
+        <a href="{% url 'events:event_list' %}" class="btn btn-primary"><i class="fas fa-calendar-alt"></i> Browse Events</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
