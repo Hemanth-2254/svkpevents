@@ -1,0 +1,74 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Staff Dashboard - SVKP College{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
+        <h1 style="font-size:24px; font-weight:700; color:var(--primary);"><i class="fas fa-tachometer-alt"></i> Staff Dashboard</h1>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            
+
+            <a href="{% url 'events:event_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Event</a>
+            <a href="{% url 'payments:qr_manage' %}" class="btn btn-secondary"><i class="fas fa-qrcode"></i> Manage QR Codes</a>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:18px; margin-bottom:30px;">
+        <div class="card" style="padding:22px; text-align:center; border-top:4px solid var(--primary);">
+            <div style="font-size:2.2em; font-weight:800; color:var(--primary);">{{ events.count }}</div>
+            <div style="font-size:13px; color:#666; font-weight:600;">Total Events</div>
+        </div>
+        <div class="card" style="padding:22px; text-align:center; border-top:4px solid var(--success);">
+            <div style="font-size:2.2em; font-weight:800; color:var(--success);">{{ confirmed_registrations }}</div>
+            <div style="font-size:13px; color:#666; font-weight:600;">Confirmed Registrations</div>
+        </div>
+        <div class="card" style="padding:22px; text-align:center; border-top:4px solid var(--secondary);">
+            <div style="font-size:2.2em; font-weight:800; color:var(--secondary);">{{ total_registrations }}</div>
+            <div style="font-size:13px; color:#666; font-weight:600;">Total Registrations</div>
+        </div>
+    </div>
+
+    <!-- Events Table -->
+    <div class="card">
+        <div class="card-header"><h3><i class="fas fa-list"></i> All Events</h3></div>
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                <thead>
+                    <tr style="background:#f5f5f5;">
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Event</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Type</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Date</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Seats</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Fee</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Status</th>
+                        <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr style="border-bottom:1px solid #f0f0f0;">
+                        <td style="padding:14px 15px; font-weight:600;">{{ event.title|truncatechars:40 }}</td>
+                        <td style="padding:14px 15px;"><span class="badge badge-{{ event.event_type }}">{{ event.get_event_type_display }}</span></td>
+                        <td style="padding:14px 15px; color:#666;">{{ event.start_date|date:"M d, Y" }}</td>
+                        <td style="padding:14px 15px;">{{ event.available_seats }}/{{ event.total_seats }}</td>
+                        <td style="padding:14px 15px; font-weight:700; color:var(--secondary);">
+                            {% if event.fee == 0 %}FREE{% else %}₹{{ event.fee }}{% endif %}
+                        </td>
+                        <td style="padding:14px 15px;"><span class="badge badge-{{ event.status }}">{{ event.get_status_display }}</span></td>
+                        <td style="padding:14px 15px;">
+                            <a href="{% url 'events:staff_event_registrations' event.id %}"class="btn btn-sm btn-primary">View Registrations</a>
+                            <a href="{% url 'events:event_detail' event.pk %}" class="btn btn-outline btn-sm">View</a>
+                            <a href="{% url 'events:event_update' event.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">No events found</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
