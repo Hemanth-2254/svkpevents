@@ -52,7 +52,7 @@ protobuf==7.34.0
 psycopg2-binary==2.9.9
 Pygments==2.19.2
 PyJWT==2.10.1
-PyMySQL==1.1.2
+
 pyparsing==3.3.2
 pypng==0.20220715.0
 python-dateutil==2.9.0.post0
@@ -82,6 +82,7 @@ urllib3==2.4.0
 Werkzeug==3.1.6
 pip==26.0.1
 wheel==0.46.3
+mysqlclient
 whitenoise==6.6.0
 wrapt==2.1.1
 
